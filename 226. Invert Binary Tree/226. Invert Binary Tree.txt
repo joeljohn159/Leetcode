@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function(root) {
+
+    // I need  to do the BFS. I have to go twice? What if left and right is changes? Yes it is
+    function Swapper(node){
+        let temp = node.left;
+        node.left = node.right;
+        node.right = temp
+    }
+
+    function BFS(root){
+        if(root.left === null && root.right === null){
+            return 
+        }
+        if(root.left && root.right){
+            Swapper(root)
+            BFS(root.left);
+            BFS(root.right);
+        }
+        else if(root.left){
+            Swapper(root)
+            BFS(root.right);
+        }else{
+             Swapper(root)
+            BFS(root.left);
+        }
+        
+    }
+
+    let x = root;
+    if(x === null) return x
+    BFS(x)
+    return root
+    
+};
