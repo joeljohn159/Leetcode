@@ -1,0 +1,29 @@
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} k
+ * @return {number}
+ */
+var kthSmallest = function(root, k) {
+    //GO to the left most end, start appending values to storage till storage.length <= k-1
+    let storage = [];
+
+
+    function dfs(curr){
+        if(!curr || storage.length > k) return;
+        dfs(curr.left)
+        storage.push(curr.val)
+        dfs(curr.right)
+    }
+    dfs(root)
+    // console.log(storage)
+    return storage[k-1]
+
+};
