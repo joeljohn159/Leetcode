@@ -1,0 +1,109 @@
+//MaxPriority Queue
+
+class MaxPriorityQueueJOEL {
+    constructor(){
+        this.heap = []
+    }
+
+    parent(i){
+        return Math.floor((i-1)/2)
+    }
+
+    leftChild(i){
+        return i*2 + 1
+    }
+    
+    rightChild(i){
+        return i*2 + 2
+    }
+    swap(i1,i2){
+        [this.heap[i1], this.heap[i2]] = [this.heap[i2], this.heap[i1]];
+    }
+    heapifyUp(i){
+        let parent = this.parent(i);
+        if (parent < 0) return;
+        if(this.heap[parent] < this.heap[i]){
+            this.swap(parent, i);
+            this.heapifyUp(parent)
+        }
+
+    }
+    heapifyDown(i){
+        let leftChild = this.leftChild(i);
+        let rightChild = this.rightChild(i);
+        let max = i
+
+        if(leftChild < this.heap.length && this.heap[leftChild] > this.heap[max]){
+            max = leftChild
+        }
+
+         if(rightChild < this.heap.length && this.heap[rightChild] > this.heap[max]){
+            max = rightChild
+        }
+
+        if(i != max){
+            this.swap(i, max)
+            this.heapifyDown(max)
+        }
+    }
+
+    enqueue(val){
+        this.heap.push(val);
+        this.heapifyUp(this.heap.length - 1)
+    }
+
+    dequeue(){
+        if(this.heap.length < 1 ) return;
+        let top = this.heap[0]
+        let end = this.heap.pop()
+
+        if(this.heap.length >= 1){
+            this.heap[0] = end; 
+            this.heapifyDown(0)
+        }
+        return top;
+    }
+
+
+    peek(){
+        if(!this.heap.length) return null;
+        return this.heap[0]
+    }
+
+    size(){
+        return this.heap.length
+    }
+
+
+}
+
+/**
+ * @param {number[]} stones
+ * @return {number}
+ */
+
+
+var lastStoneWeight = function(stones) {
+    let heap = new MaxPriorityQueueJOEL();
+    for(let i=0; i<stones.length; i++){
+        heap.enqueue(stones[i])
+        // console.log(heap)
+    }
+
+    while(heap.size() > 1){
+        let st = heap.dequeue();
+        let nd = heap.dequeue();
+        // console.log(st, nd)
+
+        if(st == nd){
+            continue
+        }else{
+            nd = st - nd
+            // console.log('SUB=',nd)
+            heap.enqueue(nd)
+            // console.log(heap)
+        }
+    }
+    if(heap.size() === 0) return 0
+    else return heap.peek()
+};
