@@ -1,0 +1,36 @@
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum = function(candidates, target) {
+
+    let n = candidates.length;
+    let res = [];
+
+
+    function backtrack(i,currArr, currSum){
+
+        if(currSum === target){
+            res.push([...currArr])
+            return 
+        }
+        if(currSum > target || i >= n){
+            return
+        }
+
+        currArr.push(candidates[i])
+
+        backtrack(i, currArr, currSum + candidates[i])
+
+        currArr.pop();
+
+        backtrack(i+1, currArr, currSum)
+
+        
+    }
+
+    backtrack(0, [], 0)
+    return res;
+
+};
