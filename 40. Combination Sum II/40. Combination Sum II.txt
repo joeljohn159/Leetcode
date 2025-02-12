@@ -1,0 +1,38 @@
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum2 = function(candidates, target) {
+
+    let res = [];
+    let n = candidates.length
+    candidates.sort((a,b)=>a-b)
+
+    function backtrack(index, currArr, currSum){
+        if(currSum === target){
+            res.push([...currArr]);
+            return 
+        }
+
+        if(currSum > target || index >= n){
+            return 
+        }
+
+        currArr.push(candidates[index]);
+        backtrack(index + 1, currArr, currSum + candidates[index])
+        currArr.pop()
+        while(index+1 < n &&  candidates[index] === candidates[index+1]){
+            index++;
+        }
+        backtrack(index + 1, currArr, currSum)
+    }
+
+    backtrack(0, [], 0)
+
+    return res
+    
+
+
+
+};
