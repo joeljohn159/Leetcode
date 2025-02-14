@@ -1,0 +1,28 @@
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permute = function(nums) {
+    let n = nums.length;
+    let res=[];
+
+    function backtrack(currArr){
+
+        if(currArr.length === n){
+            res.push([...currArr])
+            return
+        }
+
+        for(let i=0; i<n; i++){
+            if(!currArr.includes(nums[i])){
+                currArr.push(nums[i]);
+                backtrack(currArr);
+                currArr.pop()
+            }
+        }
+    }
+
+    backtrack([])
+
+    return res
+};
