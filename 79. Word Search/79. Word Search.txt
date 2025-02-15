@@ -1,0 +1,33 @@
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function(board, word) {
+    let row = board.length;
+    let col = board[0].length;
+    let wordLength = word.length
+
+    function backtrack(r,c,i){
+        if(i >= wordLength){
+            return true
+        }
+        if(r < 0 || c < 0 || r >= row || c >= col || board[r][c] != word[i]){
+            return false;
+        }
+        let temp = board[r][c]
+        board[r][c] = '#'
+        let status = backtrack(r-1,c,i+1) || backtrack(r+1,c,i+1) || backtrack(r,c-1,i+1) || backtrack(r,c+1,i+1)
+        board[r][c] = temp;
+        return status;
+    }
+
+    for(let i=0 ; i< row; i++){
+        for(let j=0; j<col; j++){
+            if(backtrack(i,j,0)){
+                return true
+            }
+        }
+    }
+    return false
+};
