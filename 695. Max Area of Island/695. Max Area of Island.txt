@@ -1,0 +1,51 @@
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var maxAreaOfIsland = function (grid) {
+
+    let rows = grid.length;
+    let cols = grid[0].length;
+    let visited = new Set()
+    let max = 0;
+
+    function bfs(i, j) {
+        let q = []
+        q.push([i, j])
+        visited.add(JSON.stringify([i, j]))
+        let directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        let count = 1
+
+        while (q.length) {
+            let [a, b] = q.shift()
+            for (let [dr, dc] of directions) {
+                let dx = dr + a;
+                let dy = dc + b;
+                let x = JSON.stringify([dx, dy])
+                if (dx >= 0 && dx < rows && dy >= 0 && dy <= cols && grid[dx][dy] === 1 && !visited.has(x)) {
+                    visited.add(x);
+                    count++;
+                    q.push([dx, dy])
+                }
+
+            }
+        }
+
+        if (count > max) {
+            max = count;
+        }
+
+
+    }
+
+
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (!visited.has(JSON.stringify([i, j])) && grid[i][j] === 1) {
+                bfs(i, j);
+            }
+        }
+    }
+    return max;
+
+};
