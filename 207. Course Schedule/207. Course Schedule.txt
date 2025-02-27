@@ -1,0 +1,47 @@
+/**
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {boolean}
+ */
+var canFinish = function(numCourses, prerequisites) {
+    
+    //adjacency list
+    let map = new Map();
+    let visited = new Set()
+
+    for(let prereq of prerequisites){
+        if(map.has(prereq[0])){
+            map.get(prereq[0]).push(prereq[1])
+        }else{
+            map.set(prereq[0], [prereq[1]])
+        }
+    }
+
+    function DFS(node){
+        if(visited.has(node)){
+            return false;
+        }
+        if(!map.has(node) || map.get(node).length === 0){
+            return true
+        }
+        neighbors = map.get(node);
+        visited.add(node)
+        for(let neighbor of neighbors){
+            if(!DFS(neighbor)){
+                return false
+            }   
+        }
+        visited.delete(node)
+        map.set(node,[])
+        return true
+    }
+
+    for(let i=0; i<numCourses; i++){
+        if(!DFS(i)){
+            return false
+        }
+    }
+
+    return true
+
+};
