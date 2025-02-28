@@ -1,0 +1,66 @@
+/**
+ * @param {string} beginWord
+ * @param {string} endWord
+ * @param {string[]} wordList
+ * @return {number}
+ */
+var ladderLength = function(beginWord, endWord, wordList) {
+
+    let graph = new Map();
+
+
+    // I need  a function to check if 2 words differ from only 1 letter
+    function oneLetterDiff(word1, word2){
+        let diff = 0;
+        for(let i=0; i<word1.length; i++){
+            if(word1[i] !== word2[i]){
+                diff++;
+                if(diff >  1) return false
+            }
+        }
+        return diff === 1
+    }
+
+    // A function to merges the 2 words - > logic will be first cheked if only 1 diff, Its a undirected graph,
+    function addEdge(word1, word2){
+        if(!graph.has(word1)){
+            graph.set(word1, [])
+        }
+        if(!graph.has(word2)){
+            graph.set(word2, [])
+        }
+        graph.get(word1).push(word2)
+        graph.get(word2).push(word1)
+    }
+
+    //Loop and use the above 2 function to create the graphDS
+    let words = [beginWord, ...wordList]
+    let len = words.length
+    for(let i=0; i<len; i++){
+        for(let j=i+1; j< len; j++){
+            if(oneLetterDiff(words[i],words[j])){
+                addEdge(words[i], words[j])
+            }
+        }
+    }
+
+    let queue = []
+    queue.push([beginWord, 1]);
+    let visited = new Set()
+    visited.add(beginWord)
+
+    while(queue.length > 0){
+        let [word, level] = queue.shift();
+
+        if(word === endWord) return level;
+
+        for(let neighbor of (graph.get(word) || [])){
+            if(!visited.has(neighbor)){
+                queue.push([neighbor, level+1]);
+                visited.add(neighbor);
+            }
+        }
+    }
+    return 0;
+
+};
