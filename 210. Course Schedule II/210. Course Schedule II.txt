@@ -1,0 +1,48 @@
+/**
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {number[]}
+ */
+var findOrder = function(numCourses, prerequisites) {
+  //create an adjacency list
+  let map = new Map();
+  // If visited node is encountered again this shows possibility of a cycle in the graph
+  let visited = new Set();
+  let visiting = new Set()
+  let finalArr = []
+
+  for(let [crs, pre] of prerequisites){
+    if(!map.has(crs)){
+        map.set(crs, [pre])
+    }else{
+        map.get(crs).push(pre)
+    }
+  } 
+
+  function DFS(node){
+    if(visiting.has(node)){
+        return false
+    }
+    if(visited.has(node)){
+        return true
+    }
+    visiting.add(node)
+    for(let neighbor of (map.get(node) || [])){
+        if(!DFS(neighbor)){
+            return false
+        }
+    }
+    visiting.delete(node);
+    visited.add(node)
+    finalArr.push(node)
+    return true
+
+  }
+
+  for(let i=0 ; i<numCourses; i++){
+    if(!DFS(i)){
+        return []
+    }
+  }
+    return finalArr
+};
