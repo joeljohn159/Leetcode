@@ -1,0 +1,42 @@
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function (m, n) {
+    //What if I start from the end and move UP and move LEFT
+
+    let map = new Map()
+
+    let pathArr = Array.from({ length: m }, () => Array(n).fill(0))
+    let queue = []
+    let visited = new Set()
+    queue.push([m - 1, n - 1])
+    pathArr[m - 1][n - 1] = 1
+
+    while (queue.length > 0) {
+        let [posX, posY] = queue.shift();
+        if(visited.has(`${posX},${posY}`)){
+            continue;
+        }
+        visited.add(`${posX},${posY}`)
+        let directions = [[-1, 0], [0, -1]]
+
+        let currVal = pathArr[posX][posY];
+
+        for (let [x, y] of directions) {
+            if (posX + x < 0 || posY + y < 0) {
+                continue;
+            }
+            queue.push([posX + x, posY + y])
+            pathArr[posX + x][posY + y] = pathArr[posX + x][posY + y] + currVal
+
+        }
+
+
+    }
+
+    return pathArr[0][0]
+
+
+};
