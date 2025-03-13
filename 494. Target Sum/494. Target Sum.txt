@@ -1,0 +1,30 @@
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var findTargetSumWays = function(nums, target) {
+    let n = nums.length
+    let memo = new Map();
+    function dfs(i, sum){
+        
+        if(i === n){
+            return sum === target ? 1 : 0
+        }
+        let key = `${i},${sum}`;
+
+        if(memo.has(key)){
+            return memo.get(key)
+        }
+
+        let ways = 0;
+
+        ways = dfs(i+1, sum+nums[i]) + dfs(i+1, sum-nums[i]) 
+        memo.set(key, ways)
+
+        return ways;
+    }
+
+    return dfs(0,0)
+    
+};
