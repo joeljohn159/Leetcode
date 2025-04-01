@@ -1,0 +1,61 @@
+/**
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var rotate = function(matrix) {
+    //The approach is going layer by layer
+    //each layer we gooo element by element, left to right, right to bottom, bootom to lefr, left to top
+
+    // console.log(matrix)
+
+    let l = 0; 
+    let r = matrix.length-1;
+
+    while(l < r){
+        for(let i=0; i<r-l; i++){
+            //There will in total 4 swaps 
+            //Store the top left value into temp
+            let temp = matrix[l][l+i]
+
+            // Store the bottom left to top
+           matrix[l][l+i] = matrix[r-i][l] 
+
+            //Store bottom right to bottom left
+            matrix[r-i][l]  = matrix[r][r-i]
+
+            //Store top right to bottom right
+           matrix[r][r-i] = matrix[l+i][r]
+
+            //Store the temp to top right
+            matrix[l+i][r] = temp
+        }
+        l++;
+        r--;
+    }
+
+    // console.log(matrix)
+
+    // Make sure the vertical we are moving across rows
+
+
+    // I will try with built in JS feature
+
+
+
+
+    //Transpose it
+
+    // let n = matrix.length
+    // for(let i=0; i<n ;i++){
+    //     for(let j=i+1; j<n; j++){
+    //         [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]]
+    //     }
+    // }
+
+    
+
+    // for(let row of matrix){
+    //     row.reverse()
+    // }
+
+};
