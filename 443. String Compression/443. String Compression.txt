@@ -1,0 +1,35 @@
+/**
+ * @param {character[]} chars
+ * @return {number}
+ */
+var compress = function (chars) {
+    // This problem will use 2 pointer, Here t make it easier lets have read pointer and write pointer
+
+    let read = 0;
+    let write = 0;
+    let n = chars.length
+
+
+    while (read < n) {
+        let count = 0;
+        let char = chars[read];
+
+        while (read < n && char === chars[read]) {
+            read++;
+            count++
+        }
+
+        chars[write] = char;
+        write++;
+
+        if (count > 1) {
+            for (let intStr of String(count)) {
+                chars[write] = intStr;
+                write++
+            }
+        }
+    }
+
+    return write
+
+};
