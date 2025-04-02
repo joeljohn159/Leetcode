@@ -1,0 +1,61 @@
+/**
+ * @param {string} s
+ * @param {string} goal
+ * @return {boolean}
+ */
+var rotateString = function(s, goal) {
+//     let n = s.length;
+// //TC: n.m
+//     while(n){
+//         if(s === goal) return true
+//         goal = goal.slice(1) + goal[0] // O(n)
+//         n--;
+//     }
+//     return false
+
+
+//Best case should be O(n+m)
+//KMP - Knuth-Morris-Pratt Algorithm .. LPS Longest Prefix Suffix 
+
+function computeLPS(pattern){
+    let n = pattern.length
+    let lps = new Array(n).fill(0);
+    let j=0;
+
+    for(let i=1; i<n; i++){
+        while(j > 0 && pattern[i] !== pattern[j]){
+            j = lps[j-1]
+        }
+        if(pattern[i] === pattern[j]){
+            j++;
+            lps[i] = j
+        }
+    }
+
+    return lps
+}
+
+
+function KMP(text, pattern){
+    let n = text.length;
+    let lps = computeLPS(pattern);
+    let j=0;
+
+    for(let i=0; i<n; i++){
+        while(j>0 && text[i] !== pattern[j]){
+            j = lps[j-1]
+        }
+        if(text[i] === pattern[j]){
+            j++;
+            if(j === pattern.length){
+                return true
+            }
+        }
+    }
+    return false
+}
+if(s.length != goal.length) return false
+return KMP(s+s, goal)
+
+
+};
