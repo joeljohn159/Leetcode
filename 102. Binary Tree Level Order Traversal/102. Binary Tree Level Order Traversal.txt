@@ -11,22 +11,25 @@
  * @return {number[][]}
  */
 var levelOrder = function(root) {
-    //This is BFS - I used a global variale as lvele to push it
-    // There is an alternative technique using QUEUE
 
-    let res = [];
+    //Will store array of values of Each level
+    let res = []
 
-    function bfs(node, level){
-        if(!node) return;
-        if(res.length <= level){
+    //BFS - use a queue
+    function DFS(node, level){
+        if(node === null){
+            return
+        }
+        if(res.length - 1 < level){
             res.push([])
         }
-        res[level].push(node.val);
-
-        bfs(node.left, 1+level);
-        bfs(node.right, 1+level);
+        res[level].push(node.val)
+        DFS(node.left, level+1)
+        DFS(node.right, level+1)
     }
-
-    bfs(root,0)
+    DFS(root, 0)
+    // console.log(res)
     return res
+    
+
 };
