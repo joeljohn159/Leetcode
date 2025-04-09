@@ -12,22 +12,32 @@
  */
 var isValidBST = function(root) {
     
-    function checkBST(curr, max, min){
-        // console.log(curr, max,min)
-        if(!curr){
-            // console.log('I come here because node = ',curr)
-            return true
-        }
-        if( curr.val >= max || curr.val <= min){
-            // console.log('Left ',curr.left)
-            // console.log(curr.val > max)
-            return false
-        }
 
-        return (checkBST(curr.left, curr.val, min) && checkBST(curr.right, max, curr.val))
+  //This can be checked with In-Order traversal
 
 
-    }
+//     let res = []
+//   function InOrder(node){
+//     if(!node){
+//         return 
+//     }
+//     InOrder(node.left);
+//     res.push(node.val);
+//     InOrder(node.right);
+//   }
+// InOrder(root)
+// //   console.log(res)
 
-    return checkBST(root, Infinity, -Infinity)
+
+//   return res.length <= 1 || res.every((item, index)=> index === 0 || item >= res[index-1])
+
+
+//Second method - by using min max
+
+function helper(node, left, right){
+    if(!node) return true;
+    if(!(node.val > left && node.val < right)) return false;
+    return (helper(node.left, left, node.val) && helper(node.right, node.val, right))
+}
+return helper(root, -Infinity, Infinity)
 };
