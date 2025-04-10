@@ -1,0 +1,40 @@
+/**
+ * @param {number[]} w
+ */
+var Solution = function(w) {
+    this.prefixSum = []
+    let total = 0
+    for(let weight of w){
+        total += weight
+        this.prefixSum.push(total)
+    }
+    this.total = total
+};
+
+/**
+ * @return {number}
+ */
+Solution.prototype.pickIndex = function() {
+    let random = Math.random() * this.total;
+    //Binary tree to find the left 
+    let l = 0;
+    let r = this.prefixSum.length - 1;
+
+    while(l < r){
+        let mid = Math.floor((r+l)/2);
+        if(this.prefixSum[mid] < random){
+            l = mid+1
+        }else{
+            r=mid
+        }
+
+    }
+
+    return l
+};
+
+/** 
+ * Your Solution object will be instantiated and called as such:
+ * var obj = new Solution(w)
+ * var param_1 = obj.pickIndex()
+ */
