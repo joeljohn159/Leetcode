@@ -1,0 +1,36 @@
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permuteUnique = function (nums) {
+    let res = []
+    let temp = []
+    let n = nums.length;
+
+    let hashMap = new Map();
+    for (let i = 0; i < n; i++) {
+        hashMap.set(nums[i], (hashMap.get(nums[i]) + 1 || 1))
+    }
+
+    function backTracking() {
+        //base case is full length 
+        if (temp.length === n) {
+            res.push([...temp]);
+            return
+        }
+        for (let [num, count] of hashMap) {
+
+            if (count > 0) {
+                temp.push(num)
+                hashMap.set(num, count-1);
+
+                backTracking();
+
+                temp.pop()
+                hashMap.set(num, count);
+            }
+        }
+    }
+    backTracking()
+    return res
+};
