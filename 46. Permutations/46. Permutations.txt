@@ -3,26 +3,31 @@
  * @return {number[][]}
  */
 var permute = function(nums) {
-    let n = nums.length;
-    let res=[];
+    let res = []
+    let temp = []
+    let n = nums.length
 
-    function backtrack(currArr){
+    //TF arrray
+    let TFarr = new Array(n).fill(false)
 
-        if(currArr.length === n){
-            res.push([...currArr])
+    function back(){
+        if(temp.length === n){
+            res.push([...temp])
             return
         }
 
-        for(let i=0; i<n; i++){
-            if(!currArr.includes(nums[i])){
-                currArr.push(nums[i]);
-                backtrack(currArr);
-                currArr.pop()
+        for(let i=0; i<n;i++){
+            if(TFarr[i] === false){
+                TFarr[i] = true
+                temp.push(nums[i])
+                back() 
+                 TFarr[i] = false
+            temp.pop()
             }
+           
         }
+        
     }
-
-    backtrack([])
-
+    back()
     return res
 };
