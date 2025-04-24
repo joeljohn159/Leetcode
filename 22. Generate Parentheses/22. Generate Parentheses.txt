@@ -1,0 +1,37 @@
+/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var generateParenthesis = function(n) {
+
+    //Backtracking problem
+    let temp = ""
+    res = [];
+    let countC = 0;
+    let countU = 0;
+
+    function backTrack(){
+        if(temp.length == n*2){
+            res.push(temp)
+            return
+        }
+        if(countC < n){
+            temp += '('
+            countC++;
+            backTrack()
+            temp = temp.slice(0,-1);
+            countC--;
+
+        }
+        if(countU < countC){
+            temp += ')'
+            countU++;
+            backTrack()
+            temp = temp.slice(0,-1)
+            countU--;
+
+        }
+    }
+    backTrack()
+    return res
+};
