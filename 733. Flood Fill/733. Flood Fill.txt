@@ -1,0 +1,31 @@
+/**
+ * @param {number[][]} image
+ * @param {number} sr
+ * @param {number} sc
+ * @param {number} color
+ * @return {number[][]}
+ */
+var floodFill = function(image, sr, sc, color) {
+    let visited = new Set();
+    let dir = [[-1,0],[1,0],[0,1],[0,-1]]
+    let original = image[sr][sc]
+    let rowLength = image.length;
+    let colLength = image[0].length;
+
+    function bfs(row,col){
+        if(row >= rowLength || row < 0 || col >= colLength || col < 0) return;
+        if(image[row][col] != original) return
+        if(visited.has(`${row}+${col}`))return
+        
+        image[row][col] = color
+        visited.add(`${row}+${col}`)
+
+        for(let [r,c] of dir){
+            bfs(row+r, col+c)
+        }
+    }
+
+    bfs(sr,sc)
+    return image
+
+};

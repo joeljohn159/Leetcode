@@ -1,0 +1,44 @@
+/**
+ * @param {number} n
+ * @return {string[][]}
+ */
+var solveNQueens = function(n) {
+    let col = new Set();
+    let posDia = new Set();
+    let negDia = new Set();
+    let res = []
+    
+    //create a nXn board
+    let board = new Array(n).fill().map(()=> new Array(n).fill('.'));
+
+    function backtrack(r){
+        if(r == n){
+            //this means all rows are filled and a valid position of all n Queen is available;
+            res.push(board.map(item => item.join('')));
+            return
+        }
+
+        for(let i=0; i<n; i++){
+            if(col.has(i) || posDia.has(r+i) || negDia.has(r-i)){
+                continue
+            }
+
+            board[r][i] = 'Q';
+            col.add(i);
+            posDia.add(r+i);
+            negDia.add(r-i);
+
+            backtrack(r+1);
+
+            board[r][i] = '.';
+            col.delete(i);
+            posDia.delete(r+i);
+            negDia.delete(r-i)
+        }
+
+    }
+
+    backtrack(0)
+
+    return res
+};
