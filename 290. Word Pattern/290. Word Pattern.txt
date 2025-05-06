@@ -1,0 +1,32 @@
+/**
+ * @param {string} pattern
+ * @param {string} s
+ * @return {boolean}
+ */
+var wordPattern = function(pattern, s) {
+    let hashMap = new Map();
+    let hashSet = new Set();
+
+    // let sWords = s.trim().replace(/\s+/g, ' ').split(' ')
+    let sWords = s.split(' ')
+    // console.log(sWords)
+    if(pattern.length !== sWords.length) return false
+    for(let i=0; i<pattern.length; i++){
+        if(hashMap.has(pattern[i])){
+            if(hashMap.get(pattern[i]) !== sWords[i]){
+                return false 
+            }
+        }else{
+            if(!hashSet.has(sWords[i])){
+                hashMap.set(pattern[i], sWords[i]);
+                hashSet.add(sWords[i])
+            }else{
+                return false
+            }
+        }
+    //         console.log(hashMap);
+    // console.log(hashSet)
+    }
+
+    return true
+};
