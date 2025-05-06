@@ -1,0 +1,26 @@
+/**
+ * @param {number} n
+ * @return {boolean}
+ */
+var isHappy = function(n) {
+    let hashSet = new Set();
+    let valid = false;
+
+    function sumOfSquareOfDigits(num){
+        let sum = 0;
+        while(num){
+            let digit = num % 10;
+            num = Math.floor(num/10);
+            sum += digit ** 2; //Math.pow()
+        }
+        return sum
+    }
+
+    while(!hashSet.has(n)){
+        hashSet.add(n)
+        n = sumOfSquareOfDigits(n);
+        if(n == 1) return true;
+    }
+
+    return false
+};
