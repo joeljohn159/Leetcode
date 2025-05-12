@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {boolean}
+ */
+var isSameTree = function(p, q) {
+    let same = true;
+
+    function dfs(currP, currQ){
+        if(!currP && !currQ){
+            return true
+        }
+        if(!currP || !currQ){
+            return false
+        }
+
+        if(currP.val != currQ.val){
+            return false
+    }
+
+    return (dfs(currP.left, currQ.left) && dfs(currP.right, currQ.right))
+        
+    }
+
+    return dfs(p,q)
+};

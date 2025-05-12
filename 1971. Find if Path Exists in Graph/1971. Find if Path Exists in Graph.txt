@@ -1,0 +1,61 @@
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @param {number} source
+ * @param {number} destination
+ * @return {boolean}
+ */
+var validPath = function (n, edges, source, destination) {
+    //Convert the edges to Adacencey List
+    let adjList = new Map();
+
+    for (let [node1, node2] of edges) {
+        if (!adjList.has(node1)) adjList.set(node1, []);
+        if (!adjList.has(node2)) adjList.set(node2, []);
+
+        adjList.get(node1).push(node2);
+        adjList.get(node2).push(node1);
+    }
+
+    //DO BFS 
+    // let queue = [source]
+    // let visited = new Set()
+
+    // while (queue.length) {
+    //     let node = queue.shift()
+    //     // console.log(' Node= ',node)
+    //     // console.log(' Queue= ',queue)
+    //     if (node === destination) {
+    //         return true
+    //     }
+    //     for (let neighbor of adjList.get(node)) {
+    //         if (!visited.has(node)) {
+    //             visited.add(node)
+    //             queue.push(neighbor)
+    //         }
+    //     }
+
+    // }
+    // return false
+
+    //DFS Recursive
+
+    let visited = new Set()
+
+    function DFS(node){
+        if(node === destination){
+            return true
+        }
+        if(!visited.has(node)){
+            visited.add(node)
+            for(let n of adjList.get(node)){
+                if(DFS(n)){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    return DFS(source)
+};

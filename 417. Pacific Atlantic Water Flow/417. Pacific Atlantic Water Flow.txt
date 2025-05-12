@@ -1,0 +1,43 @@
+/**
+ * @param {number[][]} heights
+ * @return {number[][]}
+ */
+var pacificAtlantic = function(heights) {
+    let rows = heights.length;
+    let cols = heights[0].length;
+
+    let atlantic = Array.from({length: rows}, ()=> new Array(cols).fill(false))
+    let pacific = Array.from({length: rows}, ()=> new Array(cols).fill(false))
+
+    function dfs(row,col,arr, parentVal){
+        if(row >= rows || col >= cols || row < 0 || col < 0 || arr[row][col] === true ||   heights[row][col] < parentVal){
+            return
+        }
+        // console.log(row,col,' I am valid !')
+        arr[row][col] = true;
+        dfs(row+1, col, arr, heights[row][col]);
+        dfs(row-1, col, arr, heights[row][col]);
+        dfs(row, col-1, arr, heights[row][col]);
+        dfs(row, col+1, arr, heights[row][col]);
+
+    }
+
+    for(let i=0 ; i< cols; i++){
+        dfs(0, i, pacific, 0);
+        dfs(rows-1, i, atlantic, 0);
+    }
+
+    for(let i=0 ; i< rows; i++){
+        dfs(i, 0, pacific, 0);
+        dfs(i, cols-1, atlantic, 0);
+    }
+
+    let res = []
+    for(let i=0; i<rows; i++){
+        for(let j=0; j<cols; j++){
+            pacific[i][j] === true && atlantic[i][j] === true && res.push([i,j])
+        }
+    }
+return res;
+
+};

@@ -1,0 +1,32 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var findDuplicate = function(nums) {
+
+    //The below code uses Sorting to identify the dupicate which is not optimal solution & array is modified which should not happen
+    // nums.sort((a,b) => a-b);
+    // let right = 1;
+    // while(right < nums.length){
+    //     if(nums[right - 1] === nums[right]){
+    //         return nums[right]
+    //     }
+    //     right++;
+    // }
+
+
+    //Floyd Cycle slow fast
+
+    let slow = nums[0];
+    let fast = nums[nums[0]];
+    // console.log(fast)
+        // console.log(slow, fast,nums[slow], nums[fast])
+    while(slow != fast){
+        slow = nums[slow];
+        fast = nums[nums[fast]]
+        // console.log(slow, fast,nums[slow], nums[fast])
+
+    }
+
+    return (nums[slow])
+};

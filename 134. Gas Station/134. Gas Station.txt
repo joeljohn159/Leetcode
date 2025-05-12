@@ -1,0 +1,58 @@
+/**
+ * @param {number[]} gas
+ * @param {number[]} cost
+ * @return {number}
+ */
+var canCompleteCircuit = function(gas, cost) {
+
+    //Not Optimal
+
+    // let n = cost.length;
+
+    // for(let i=0; i<n; i++){
+    //     let start = i;
+    //     let currGas = 0;
+    //     for(let j=0; j<n ; j++){
+    //         currIndex = (start + j) % n;
+    //         currGas += gas[currIndex];
+    //         currGas -= cost[currIndex]
+    //         // console.log('CurrIndex=',currIndex,' cost=',cost[currIndex],' currGas=',currGas, ' gas[currIndex]=',gas[currIndex])
+
+    //         if(currGas < 0){
+    //             break;
+    //         }
+    //         // console.log('**')
+    //         if(j === n-1){
+    //             return start
+    //         }
+    //     }
+
+    //     // console.log('---')
+
+    // }
+
+    let totalGas = 0
+    let totalCost = 0
+    let currGas = 0;
+    let startIndex = 0;
+    let n=gas.length
+
+    for(let i=0; i<n; i++){
+        totalCost += cost[i];
+        totalGas += gas[i]
+
+        currGas += gas[i] - cost[i]
+
+        if(currGas < 0){
+            startIndex = i+1;
+            currGas = 0
+        }
+    }
+
+    if(totalCost > totalGas){
+        return -1
+    }
+
+    return startIndex
+    
+};

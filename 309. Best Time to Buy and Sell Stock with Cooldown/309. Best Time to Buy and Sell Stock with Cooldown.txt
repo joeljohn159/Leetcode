@@ -1,0 +1,33 @@
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(prices) {
+
+    let n = prices.length;
+    let dp = new Map();
+
+
+    function dfs(i, buying){
+        if(i >= n) return 0;
+
+        let key = `${i},${buying}`;
+
+        if(dp.has(key)){
+            return dp.get(key)
+        }
+
+        let skip = dfs(i+1, buying)
+        if(buying){
+            let buy = dfs(i+1, !buying) - prices[i]
+            dp.set(key, Math.max(buy, skip))
+        }else{
+            let sell = dfs(i+2, !buying) + prices[i]
+            dp.set(key, Math.max(sell, skip))
+        }
+
+        return dp.get(key)
+    }
+
+    return dfs(0, true)
+};

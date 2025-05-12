@@ -1,0 +1,114 @@
+class MinPriorityQueueJOEL {
+    constructor(k=0) {
+        this.heap = []
+        this.k = k
+    }
+    parent(i) {
+        return Math.floor((i - 1) / 2)
+    }
+    leftChild(i) {
+        return 2 * i + 1
+    }
+    rightChild(i) {
+        return 2 * i + 2
+    }
+
+    swap(i1, i2) {
+        [this.heap[i1], this.heap[i2]] = [this.heap[i2], this.heap[i1]]
+    }
+
+    //PerlocateUP
+    heapifyUp(i) {
+        let parent = this.parent(i);
+        if (i > 0 && this.heap[i] < this.heap[parent]) {
+            this.swap(i, parent);
+            this.heapifyUp(parent)
+        }
+    }
+    //PerloccateDown
+    heapifyDown(i) {
+        let leftChild = this.leftChild(i);
+        let rightChild = this.rightChild(i);
+        let smallest = i;
+
+        if (leftChild < this.heap.length && this.heap[leftChild] < this.heap[smallest]) {
+            smallest = leftChild
+        }
+        if (rightChild < this.heap.length && this.heap[rightChild] < this.heap[smallest]) {
+            smallest = rightChild
+        }
+
+        if (smallest != i) {
+            this.swap(smallest, i);
+            this.heapifyDown(smallest)
+        }
+    }
+
+    enqueue(data) {
+        this.heap.push(data);
+        this.heapifyUp(this.heap.length - 1)
+    }
+
+    dequeue() {
+        if (!this.heap.length) return null;
+        let min = this.heap[0];
+        let endData = this.heap.pop();
+
+        if (this.heap.length > 0) {
+            this.heap[0] = endData;
+            this.heapifyDown(0)
+        }
+
+        return min;
+    }
+
+    peek() {
+        return this.heap[0]
+    }
+
+    size() {
+        return this.heap.length
+    }
+
+    isEmpty() {
+        return this.heap.length === 0
+    }
+
+    removeBasedOnK() {
+        if (this.size() > this.k) {
+            this.dequeue();
+        }
+    }
+
+
+}
+
+/**
+ * @param {number} k
+ * @param {number[]} nums
+ */
+var KthLargest = function (k, nums) {
+    this.heap = new MinPriorityQueueJOEL(k);
+    for (let i = 0; i < nums.length; i++) {
+        this.heap.enqueue(nums[i])
+    }
+    while (this.heap.size() > k) {
+        this.heap.dequeue()
+    }
+};
+
+/** 
+ * @param {number} val
+ * @return {number}
+ */
+KthLargest.prototype.add = function (val) {
+    this.heap.enqueue(val);
+    this.heap.removeBasedOnK()
+    return this.heap.peek();
+};
+
+/** 
+ * Your KthLargest object will be instantiated and called as such:
+ * var obj = new KthLargest(k, nums)
+ * var param_1 = obj.add(val)
+ */

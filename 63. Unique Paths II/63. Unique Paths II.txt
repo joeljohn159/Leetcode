@@ -1,0 +1,42 @@
+/**
+ * @param {number[][]} obstacleGrid
+ * @return {number}
+ */
+var uniquePathsWithObstacles = function(obstacleGrid) {
+    let rows = obstacleGrid.length;
+    let cols = obstacleGrid[0].length;
+    let DPArr = Array.from({length:rows}, ()=> new Array(cols).fill(0));
+
+    //Base Case fillers
+    for( let i=0; i<cols; i++){
+        if(obstacleGrid[0][i] === 1){
+            // DPArr[0][i] = 0;
+            break
+        }else{
+            DPArr[0][i] = 1;
+
+        }
+    }
+
+    for( let i=0; i<rows; i++){
+        if(obstacleGrid[i][0] === 1){
+            // DPArr[0][i] = 0;
+            break
+        }else{
+            DPArr[i][0] = 1;
+
+        }
+    }
+
+
+    for(let i=1; i<rows; i++){
+        for(let j=1; j<cols; j++){
+            if(obstacleGrid[i][j] === 1){
+                continue
+            }
+            DPArr[i][j] =  DPArr[i-1][j] + DPArr[i][j-1]
+        }
+    }
+
+    return DPArr[rows-1][cols-1]
+};

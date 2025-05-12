@@ -1,0 +1,116 @@
+/**
+ * @param {character[]} tasks
+ * @param {number} n
+ * @return {number}
+ */
+//Practice the max heap
+
+class MaxHeapJoel {
+    constructor() {
+        this.heap = []
+    }
+
+    parent(i) {
+        return Math.floor((i - 1) / 2);
+    }
+
+    leftChild(index) {
+        return 2 * index + 1;
+    }
+
+    rightChild(index) {
+        return 2 * index + 2
+    }
+
+    swap(idx1, idx2) {
+        const temp = this.heap[idx1];
+        this.heap[idx1] = this.heap[idx2];
+        this.heap[idx2] = temp
+    }
+
+    insert(val) {
+        this.heap.push(val);
+        // console.log(val, this.heap)
+        this.heapifyUp(this.heap.length - 1);
+    }
+
+    getMax() {
+        if (!this.heap.length) return null;
+        let max = this.heap[0]
+        let x = this.heap.pop();
+        if(!this.heap.length) return max;
+        this.heap[0] = x
+        this.heapifyDown(0);
+        return max;
+    }
+
+    heapifyUp(index) {
+        let parent = this.parent(index);
+        if (parent >= 0 && this.heap[parent] < this.heap[index]) {
+            this.swap(index, parent);
+            this.heapifyUp(parent);
+        }
+    }
+
+    heapifyDown(index) {
+        let left = this.leftChild(index);
+        let right = this.rightChild(index);
+        let heapLength = this.heap.length - 1;
+        let max = index
+        if (left <= heapLength && this.heap[left] > this.heap[max]) {
+            max = left
+        }
+        if ( right <= heapLength && this.heap[right] > this.heap[max]) {
+            max = right
+        }
+        if (max != index) {
+            this.swap(index, max)
+            this.heapifyDown(max)
+        }
+    }
+
+    peek() {
+        if (!this.heap.length) {
+            return null
+        }
+        return this.heap[0]
+    }
+
+    size() {
+        return this.heap.length;
+    }
+
+}
+var leastInterval = function (tasks, n) {
+    // We need a max heap & a Queue- to track the interval.
+    // [ ] - I can cosider an array of size 26 as alphabets 'a'.charCodeAt(0)65&97
+    // [3,3]
+    // { a:3, b:3} - yes
+    let maxHeap = new MaxHeapJoel();
+    let hashMap = new Map();
+    tasks.map((_) => { hashMap.set(_, hashMap.has(_) ? hashMap.get(_) + 1 : 1) })
+    let hashMapVal = Array.from(hashMap.values())
+    let queue = []
+    let time = 0
+    // console.log(hashMapVal)
+    for (let i = 0; i < hashMapVal.length; i++) {
+        maxHeap.insert(hashMapVal[i])
+    }
+    // console.log('n = ',n)
+    while (maxHeap.size() || queue.length) {
+        time += 1;
+        if (maxHeap.size()) {
+            let cnt = maxHeap.getMax() - 1;
+            if (cnt) {
+                queue.push([cnt, time + n])
+            }
+        }
+        if (queue.length && queue[0][1] === time) {
+            maxHeap.insert(queue.shift()[0]);
+        }
+        // console.log('Time = ', time,maxHeap, ' Queue = ',queue)
+
+    }
+    return time;
+
+};

@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {TreeNode}
+ */
+var lowestCommonAncestor = function(root, p, q) {
+    while(root){
+        // console.log('Curr= ',root.val,' left=',root.left,' right=',root.right, ' p=',p,' q=',q)
+        // console.log(q.val >= root.val)
+        // console.log(p.val < root.val)
+        if((p.val > root.val && q.val < root.val) || (q.val > root.val && p.val < root.val) || (p.val === root.val && (q.val > root.val || q.val < root.val)) || (q.val === root.val && (p.val > root.val || p.val < root.val))){
+            // console.log('WHy')
+            return root
+        }
+        if(p.val < root.val && q.val < root.val){
+            root = root.left
+        }
+        else{
+            root = root.right
+        }
+    }
+};
