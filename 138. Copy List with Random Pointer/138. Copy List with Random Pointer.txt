@@ -1,0 +1,47 @@
+/**
+ * // Definition for a _Node.
+ * function _Node(val, next, random) {
+ *    this.val = val;
+ *    this.next = next;
+ *    this.random = random;
+ * };
+ */
+
+/**
+ * @param {_Node} head
+ * @return {_Node}
+ */
+var copyRandomList = function(head) {
+    //The linear copy fashion can be implemented easily
+    //Logic behind random? - maintain hashMap? 
+
+    let hashMap = new Map()
+
+
+    //create linear and maintain a hashMap of old and new Nodes
+
+    let temp = head
+    let newNode = new _Node(Infinity, null, null);
+    let start = newNode
+    while(temp){
+        newNode.next = new _Node(temp.val,null,null);
+        hashMap.set(temp, newNode.next);
+        temp = temp.next;
+        newNode = newNode.next;
+    }
+
+    newNode = start.next;
+    temp = head;
+
+
+
+    while(temp){
+        newNode.random = hashMap.get(temp.random) || null
+        temp = temp.next;
+        newNode = newNode.next;
+    }
+
+    return start.next
+
+
+};
