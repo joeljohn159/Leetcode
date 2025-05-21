@@ -11,22 +11,29 @@
  * @return {ListNode}
  */
 var removeNthFromEnd = function(head, n) {
+    //double pass can be done easily. whats the logic behind single pass?
 
-    let dummy = new ListNode();
-    dummy.next = head;
-    let left = dummy; 
-    let right = head;
-    
-    while(n){
+    // sliding window: 
+    let dummy = new ListNode(0, head);
+    let left = dummy
+    let right = head
+    let temp = n-1
+    while(temp){
         right = right.next;
-        n--
+        temp--;
     }
 
-    while(right){
-        right = right.next;
-        left = left.next
+    while(right.next){
+        left = left.next;
+        right = right.next
     }
 
-    left.next = left.next.next;
+    left.next = left.next.next || null;
     return dummy.next
+
+
+
+
+
+
 };
