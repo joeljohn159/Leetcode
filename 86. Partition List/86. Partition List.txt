@@ -11,22 +11,30 @@
  * @return {ListNode}
  */
 var partition = function(head, x) {
-  let left = new ListNode()
-  let right = new ListNode()
+    //am i supposed to do in place? if not in place
+    // traverse through the LL and arr = [...all] 
 
-  let leftPointer = left;  
-  let rightPointer = right;  
 
-  while(head){
-    if(head.val < x){
-        leftPointer.next =new ListNode(head.val);
-        leftPointer = leftPointer.next;
-    }else{
-        rightPointer.next =new ListNode(head.val);
-        rightPointer = rightPointer.next;
+
+    let left = new ListNode();
+    let right = new ListNode();
+
+
+    let ltail = left;
+    let rtail = right;
+
+    while(head){
+        if(head.val < x){
+            ltail.next =  head;
+            ltail = ltail.next
+        }else{
+            rtail.next = head;
+            rtail = rtail.next
+        }
+        head = head.next
     }
-    head = head.next
-  }
-  leftPointer.next = right.next
-  return left.next
+
+    ltail.next = right.next;
+    rtail.next = null;
+    return left.next;
 };
