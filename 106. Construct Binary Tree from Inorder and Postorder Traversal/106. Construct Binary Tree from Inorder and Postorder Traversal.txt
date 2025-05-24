@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {number[]} inorder
+ * @param {number[]} postorder
+ * @return {TreeNode}
+ */
+var buildTree = function(inorder, postorder) {
+    
+
+    let n = inorder.length
+
+    let hashMap = new Map()
+    for(let i=0; i<n; i++){
+        hashMap.set(inorder[i],i)
+    }
+
+    function recursion(iStart, iEnd){
+        // inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
+
+        if(iStart > iEnd || !postorder.length) return null;
+
+        let rootVal = postorder.pop();
+        let root = new TreeNode(rootVal);
+        let rootIndexInInorder = hashMap.get(rootVal); 
+
+        root.right = recursion(rootIndexInInorder+1,iEnd)
+        root.left = recursion(iStart, rootIndexInInorder-1);
+        return root;
+    }
+    return recursion(0,n-1)
+};
