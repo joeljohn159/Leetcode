@@ -11,22 +11,22 @@
  * @return {number[]}
  */
 var rightSideView = function(root) {
-    //Again BFS
+    if(!root) return []
     let res = []
+    let queue = [root]
 
-    const BFS = (node, level) => {
-        if(!node) return
+    while(queue.length){
+        let levelLength = queue.length;
 
-        // if(res.length <= level){
-        //     res.push(0);
-        // }
+        for(let i=0; i<levelLength; i++){
+            let node = queue.shift();
+            //if last of level
+            if(i == levelLength-1)res.push(node.val);
+            if(node.left) queue.push(node.left);
+            if(node.right) queue.push(node.right);
+        }
 
-        res[level] = node.val
-        BFS(node.left, level+1)
-        BFS(node.right, level+1)
     }
-
-    BFS(root,0)
 
 
     return res
