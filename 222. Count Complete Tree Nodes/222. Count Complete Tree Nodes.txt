@@ -1,0 +1,29 @@
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var countNodes = function(root) {
+    //bfs
+    if(!root) return 0;
+    let stack = [root]
+    let count = 0;
+
+    while(stack.length){
+        let popped = stack.pop();
+        count++;
+        if(popped.left) {
+            stack.push(popped.left);
+        }
+        if(popped.right) stack.push(popped.right);
+    }
+
+    return count
+};
