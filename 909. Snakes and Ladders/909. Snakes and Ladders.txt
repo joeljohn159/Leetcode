@@ -1,0 +1,49 @@
+/**
+ * @param {number[][]} board
+ * @return {number}
+ */
+var snakesAndLadders = function(board) {
+    let n = board.length;
+    board.reverse();
+
+
+    function intToPos(num){
+        let r = Math.floor((num-1)/n);
+        let c = Math.floor((num-1)%n);
+        if(r%2){
+            c = n-1-c;
+        }
+        return [r,c];
+    }
+
+
+
+    //BFS
+    let queue = [[1,0]] // [positionNumber, moves]
+    let visited = new Set()
+
+    while(queue.length){
+        let [pos, moves] = queue.shift();
+        // if(visited.has(pos)) return
+
+        for(let i=1; i<7; i++){
+            let nextNum = pos + i;
+            if (nextNum > n * n) continue;
+            let [r,c] = intToPos(nextNum); 
+            if(board[r][c] !== -1){
+                nextNum = board[r][c]
+            }
+
+            if(nextNum === n*n){
+                return moves+1
+            }
+            if(!visited.has(nextNum)){
+                visited.add(nextNum);
+                queue.push([nextNum, moves+1])
+            }
+        }
+
+    }
+
+    return -1;
+};
