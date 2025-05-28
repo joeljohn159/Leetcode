@@ -1,0 +1,42 @@
+/**
+ * @param {string} startGene
+ * @param {string} endGene
+ * @param {string[]} bank
+ * @return {number}
+ */
+var minMutation = function (startGene, endGene, bank) {
+
+    function diff(string1, string2) {
+        if (string1.length !== string2.length) return false;
+        let count = 0;
+        for (let i = 0; i < string1.length; i++) {
+            if (string1[i] !== string2[i]) {
+                count++
+            }
+        }
+        return count;
+    }
+    //create a adjacency list to map all the   
+
+
+    let queue = [[startGene, 0]] // gene , steps/moves
+    let visited = new Set();
+
+
+    while(queue.length){
+        let [curr, steps] = queue.shift();
+        if(curr == endGene) return steps;
+
+        for(let gene of bank){
+            if(!visited.has(gene) && diff(curr, gene) === 1){
+                queue.push([gene, steps+1]);
+                visited.add(gene)
+            }
+        }
+    }
+
+    return -1;
+
+
+
+};
