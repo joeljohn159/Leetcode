@@ -1,0 +1,62 @@
+class Node{
+    constructor(){
+        this.children = {}
+        this.end = false
+    }
+}
+
+
+var Trie = function() {
+    this.root = new Node();
+    this._searchPrefix = (prefix) => {
+        let curr = this.root
+        for(let c of prefix){
+            if(!curr.children[c]) return false;
+            curr = curr.children[c]
+        }
+        return curr
+    }
+};
+
+/** 
+ * @param {string} word
+ * @return {void}
+ */
+Trie.prototype.insert = function(word) {
+    let currNode = this.root
+    for(let char of word){
+        if(!currNode.children[char]){
+            currNode.children[char] = new Node()
+        }
+        currNode = currNode.children[char];
+    }
+    currNode.end = true;
+};
+
+/** 
+ * @param {string} word
+ * @return {boolean}
+ */
+Trie.prototype.search = function(word) {
+    let node = this._searchPrefix(word);
+    return node.end == true ? true : false
+};
+
+/** 
+ * @param {string} prefix
+ * @return {boolean}
+ */
+Trie.prototype.startsWith = function(prefix) {
+    return this._searchPrefix(prefix) !== false;
+};
+
+/** 
+ * Your Trie object will be instantiated and called as such:
+ * var obj = new Trie()
+ * obj.insert(word)
+ * var param_2 = obj.search(word)
+ * var param_3 = obj.startsWith(prefix)
+ */
+
+
+ //Trie Class
