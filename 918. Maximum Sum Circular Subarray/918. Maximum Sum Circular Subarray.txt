@@ -1,0 +1,18 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubarraySumCircular = function(nums) {
+    let globalMin = nums[0], globalMax = nums[0], currMax = 0, currMin = 0;
+    let total = 0;
+    for(let i=0; i<nums.length; i++){
+        total+=nums[i];
+        currMax = Math.max(nums[i], nums[i]+currMax);
+        currMin = Math.min(nums[i], nums[i]+currMin);
+        globalMax = Math.max(globalMax, currMax);
+        globalMin = Math.min(globalMin, currMin)
+    }
+
+    if(currMax < 0) return globalMax
+    return Math.max(globalMax, total-globalMin)
+};
