@@ -1,0 +1,67 @@
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var sortList = function(head) {
+    //Merge sort of linkedList
+
+
+    //basecase
+    if(!head || !head.next){
+        return head;
+    }
+
+    let left = head;
+    let right = getMid(head);
+    let temp = right;
+    right = right.next;
+    temp.next = null;
+
+    left = sortList(left);
+    right = sortList(right);
+    return merge(left, right)
+};
+
+
+function merge(left, right){
+
+    let dummy = new ListNode(0);
+    let temp = dummy;
+    while(left && right){
+        if(left.val <= right.val){
+            dummy.next = left;
+            left = left.next
+        }else{
+            dummy.next = right;
+            right = right.next;
+        }
+        dummy = dummy.next;
+    }
+    if(left){
+        dummy.next = left
+    }
+    if(right){
+        dummy.next = right
+    }
+    return temp.next
+}
+
+
+function getMid(head){
+    //slow and fast pointer
+    let slow = head;
+    let fast = head.next;
+    while(fast && fast.next){
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    
+    return slow;
+}
