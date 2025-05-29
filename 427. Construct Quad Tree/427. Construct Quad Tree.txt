@@ -1,0 +1,50 @@
+/**
+ * // Definition for a QuadTree node.
+ * function _Node(val,isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
+ *    this.val = val;
+ *    this.isLeaf = isLeaf;
+ *    this.topLeft = topLeft;
+ *    this.topRight = topRight;
+ *    this.bottomLeft = bottomLeft;
+ *    this.bottomRight = bottomRight;
+ * };
+ */
+
+/**
+ * @param {number[][]} grid
+ * @return {_Node}
+ */
+var construct = function (grid) {
+
+
+    function allSame(n, r, c) {
+        //logic
+        let temp = grid[r][c]
+        for (let i = r; i < r + n; i++) {
+            for (let j = c; j < c + n; j++) {
+                if (grid[i][j] != temp) return false
+            }
+        }
+        return true
+    }
+
+    let n = grid.length;
+
+    function divideAndConquer(n, r, c) {
+        if (allSame(n, r, c)) {
+            return new _Node(grid[r][c] === 1, true, null, null, null, null)
+        }
+        let half = n/2
+        let topLeft = divideAndConquer(half, r, c);
+        let topRight = divideAndConquer(half, r, c +half);
+        let bottomLeft = divideAndConquer(half, r + half, c);
+        let bottomRight = divideAndConquer(half, r + half, c +half);
+        return new _Node(true, false, topLeft, topRight, bottomLeft, bottomRight);
+    }
+
+    return divideAndConquer(n, 0, 0)
+
+
+
+
+};
