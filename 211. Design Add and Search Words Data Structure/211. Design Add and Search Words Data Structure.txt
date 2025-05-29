@@ -1,0 +1,58 @@
+class Node {
+    constructor() {
+        this.children = {};
+        this.end = false;
+    }
+}
+
+
+var WordDictionary = function () {
+    this.root = new Node();
+};
+
+/** 
+ * @param {string} word
+ * @return {void}
+ */
+WordDictionary.prototype.addWord = function (word) {
+    let node = this.root;
+    for (let char of word) {
+        if (!node.children[char]) {
+            node.children[char] = new Node()
+        }
+        node = node.children[char]
+    }
+    node.end = true;
+};
+
+/** 
+ * @param {string} word
+ * @return {boolean}
+ */
+WordDictionary.prototype.search = function (word) {
+    
+    function dfs(node, i){
+        if(i == word.length) return node.end;
+
+        let char = word[i]
+        if(char === '.'){
+            for(let n in node.children){
+                if(dfs(node.children[n], i+1)) return true;
+            }
+            return false
+        }else{
+            if(!node.children[char]) return false;
+            return dfs(node.children[char], i+1)
+        }
+    }
+
+    return dfs(this.root, 0)
+
+};
+
+/** 
+ * Your WordDictionary object will be instantiated and called as such:
+ * var obj = new WordDictionary()
+ * obj.addWord(word)
+ * var param_2 = obj.search(word)
+ */
