@@ -1,0 +1,45 @@
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode[]} lists
+ * @return {ListNode}
+ */
+var mergeKLists = function(lists) {
+    //merge sort
+    if(!lists.length) return null;
+    if(lists.length === 1) return lists[0]
+
+    let mid = getMid(lists);
+    let left = mergeKLists(lists.slice(0,mid));
+    let right = mergeKLists(lists.slice(mid));
+    return merge(left, right);
+
+};
+
+function merge(left, right){
+    let dummy = new ListNode(0, null);
+    let test = dummy;
+    while(left && right){
+        if(left.val <= right.val){
+            dummy.next = left
+            left = left.next
+        }else{
+            dummy.next = right;
+            right = right.next
+        }
+        dummy = dummy.next
+    }
+    dummy.next = left || right
+
+    return test.next;
+}
+
+function getMid(arr){
+    let mid = Math.floor(arr.length/2)
+    return mid
+}
