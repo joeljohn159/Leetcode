@@ -1,0 +1,36 @@
+/**
+ * @param {number[][]} triangle
+ * @return {number}
+ */
+var minimumTotal = function(triangle) {
+    //DFS
+    // let n = triangle.length;
+    // let minValue = Infinity;
+
+    // function dfs(row, pos, sum){
+    //     if(row >= n) return;
+    //     sum = sum+triangle[row][pos]
+    //     if(row === n-1){
+    //         minValue = Math.min(minValue, sum)
+    //     } 
+    //     dfs(row+1, pos, sum);
+    //     dfs(row+1, pos+1, sum);
+    // }
+
+    // dfs(0,0,0);
+    // return minValue
+
+    //DP
+
+    let n = triangle.length;
+    let dp = [...triangle[n-1]];
+
+
+    for(let row=n-2; row>=0 ;row--){
+        for(let i=0; i<triangle[row].length; i++){
+            dp[i] = triangle[row][i] + Math.min(dp[i], dp[i+1])
+        }
+    }
+
+    return dp[0]
+};
