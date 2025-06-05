@@ -1,0 +1,32 @@
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var longestPalindrome = function(s) {
+    let res = ''
+    let n = s.length;
+
+
+    for(let i=0; i<n; i++){
+        //ODD
+        let l = i;
+        let r = i;
+        while(l >= 0 && r <= n-1 && s[l] === s[r]){
+            res = res.length < r-l+1 ? s.substring(l,r+1) : res;
+            l--;
+            r++;
+        }
+
+        //EVEN
+        l = i;
+        r = i+1;
+        while(l >= 0 && r <= n-1 && s[l] === s[r]){
+            res = res.length < r-l+1 ? s.substring(l,r+1) : res;
+            l--;
+            r++;
+        }
+
+    }
+
+    return res;
+};
