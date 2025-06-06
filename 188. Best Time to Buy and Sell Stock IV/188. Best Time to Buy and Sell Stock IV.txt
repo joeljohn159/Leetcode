@@ -1,0 +1,36 @@
+/**
+ * @param {number} k
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(k, prices) {
+    
+    let dp = {};
+
+    function helper(day, buy, sell){
+        //base case
+        if(day >= prices.length || sell >= k) return 0;
+
+        let key = `${day},${buy},${sell}`;
+        if(key in dp) return dp[key];
+
+
+        let currVal = prices[day];
+
+        let doNothing = helper(day+1, buy, sell)
+        let doSomething;
+
+       
+        if(buy === sell){  //Buy 
+            doSomething = helper(day+1, buy+1, sell) - currVal;
+        }else{            //Sell 
+            doSomething = helper(day+1, buy, sell+1) + currVal;
+        }
+
+        let res = Math.max(doNothing, doSomething);
+        dp[key] = res;
+        return res;
+    }
+
+    return helper(0, 0, 0)
+};
