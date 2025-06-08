@@ -1,0 +1,45 @@
+/**
+ * @param {string} s
+ * @param {string[]} words
+ * @return {number[]}
+ */
+var findSubstring = function(s, words) {
+    //Combinations = order does not matter n!/r!(n-r)! 
+    //Permutation = Order matters n!/(n-r)!
+    // n = total number of elements
+    // r = the number being arranged
+    
+    //if no string or no words return empty array
+    if(!s.length || !words.length) return []
+
+
+    //create hashMap for the words and its freq
+    let hashMap = {}
+    for(let word of words){
+        if(word in hashMap){
+            hashMap[word]++;
+        }else{
+            hashMap[word] = 1;
+        }
+    }
+
+    let wordLength = words[0].length;
+    let windowLength = wordLength * words.length;
+    let res = []
+    
+
+    for(let i=0; i<s.length-windowLength+1; i++){
+        let currWordFreq = {}
+        let j=i;
+        while(j < i+windowLength){
+            let currWord = s.substring(j,j+ wordLength); //cause wordslength has 1 
+            if(!(currWord in hashMap)) break;
+            currWordFreq[currWord] = (currWordFreq[currWord] || 0) + 1;
+            if(currWordFreq[currWord] > hashMap[currWord]) break;
+            j += wordLength
+        }
+        if(j === i+windowLength) res.push(i);
+    }
+
+    return res
+}; 
