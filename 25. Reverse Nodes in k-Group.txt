@@ -1,0 +1,50 @@
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {ListNode}
+ */
+var reverseKGroup = function(head, k) {
+    // Most of the time a dummy is assigned to the head 
+
+    let dummy = new ListNode(0, head);
+
+    let groupPrev = dummy;
+
+    //infinity till end
+    while(true){
+        let kth = getKthNode(groupPrev, k);
+        if(!kth) break;
+
+        //reverse till kth node
+
+    let groupNext = kth.next
+        let prev = kth.next;
+        let curr = groupPrev.next;
+
+        while(curr !== groupNext){
+            let temp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        let tmp = groupPrev.next;
+        groupPrev.next = prev;
+        groupPrev = tmp;
+    }
+
+    return dummy.next;
+    function getKthNode(currNode, k){
+        while(currNode && k > 0){
+            currNode = currNode.next;
+            k--;
+        }
+        return currNode;
+    }
+}; 
