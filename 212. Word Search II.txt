@@ -1,0 +1,73 @@
+/**
+ * @param {character[][]} board
+ * @param {string[]} words
+ * @return {string[]}
+ */
+
+class TrieNode{
+    constructor(){
+        this.children = {};
+        this.isWord = false
+    }
+
+    addWord(word){
+        let root = this
+        for(let c of word){
+            if(c in root.children){
+                root = root.children[c]
+            }else{
+                root.children[c] = new TrieNode();
+                root = root.children[c]
+            }
+        }
+        root.isWord = true
+    }
+}
+var findWords = function(board, words) {
+    // convert the words to trie, not the entire board as its similar to doing dfs for each words on each node.
+
+    //convert words to trie
+    let root = new TrieNode();
+    for(let word of words){
+        root.addWord(word)
+    }
+
+
+    let rows = board.length;
+    let cols = board[0].length;
+
+    let visit = new Set()
+    let res = new Set()
+
+    function dfs(row,col, node, word){
+        //base case
+
+        if(row < 0 || col < 0 || row >= rows || col >= cols || !(board[row][col] in node.children) || visit.has(`${row},${col}`)) return
+
+        visit.add(`${row},${col}`);
+        node = node.children[board[row][col]]
+        word += board[row][col];
+        if(node.isWord) {
+            res.add(word)
+            node.isWord = false
+        }
+
+
+        dfs(row-1, col, node, word);
+        dfs(row+1, col, node, word);
+        dfs(row, col-1, node, word);
+        dfs(row, col+1, node, word);
+
+        visit.delete(`${row},${col}`)
+
+    }
+    //check from every index in matrix
+    for(let row = 0; row < rows; row++){
+        for(let col = 0; col < cols ; col++){
+            dfs(row,col, root, "")
+        }
+    }
+
+
+    return [...res]
+}; 
