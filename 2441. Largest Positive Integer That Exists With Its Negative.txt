@@ -1,0 +1,25 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var findMaxK = function(nums) {
+    //2 pointers
+    let left = 0;
+    let right = nums.length;
+    let max;
+
+    nums.sort((a,b)=>a-b)
+    
+    while(left < right){
+        if(nums[left] + nums[right] == 0){
+            max = nums[right]
+            break;
+        }else if(nums[left] + nums[right] < 0){
+            left++;
+        }else{
+            right--;
+        }
+    }
+
+    return max == undefined ? -1 : max
+}; 
