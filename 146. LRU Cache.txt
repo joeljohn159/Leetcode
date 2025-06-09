@@ -1,0 +1,89 @@
+//class is crt
+class Node{
+    constructor(key, val){
+        this.prev = null;
+        this.next = null;
+        this.key = key
+        this.val = val;
+    }
+}
+
+
+/**
+ * @param {number} capacity
+ */
+var LRUCache = function(capacity) {
+    this.cap = capacity;
+    this.cache = {}
+    //currSize
+    this.size = 0;
+    //Left will store the Least Recently Used
+    this.left = new Node(0,0); //DUMMY
+    //Right will use the most recently used
+    this.right = new Node(0,0); //DUMMY
+    this.left.next = this.right;
+    this.right.prev = this.left
+};
+
+
+//helper functions to insert
+
+LRUCache.prototype.insert = function(node){
+    //if i am inserting a node, it is most recently used hence insert to the right most.
+    let temp = this.right.prev;
+    temp.next = node;
+    node.prev = temp;
+    node.next = this.right;
+    this.right.prev = node;
+}
+
+
+
+LRUCache.prototype.remove = function(node){
+    //remove the node if it exist.
+    let prev = node.prev;
+    let next = node.next;
+    prev.next = next;
+    next.prev = prev;
+}
+
+/** 
+ * @param {number} key
+ * @return {number}
+ */
+LRUCache.prototype.get = function(key) {
+    if(key in this.cache){
+        this.remove(this.cache[key]);
+        this.insert(this.cache[key])
+        return this.cache[key].val
+    }
+    return -1;
+};
+
+/** 
+ * @param {number} key 
+ * @param {number} value
+ * @return {void}
+ */
+LRUCache.prototype.put = function(key, value) {
+    if(key in this.cache){
+        this.remove(this.cache[key]);
+        this.size--;
+    }
+    this.cache[key] = new Node(key, value)
+    this.insert(this.cache[key])
+    this.size++;
+    if(this.size > this.cap){
+        let least = this.left.next
+        this.remove(least)
+        delete this.cache[least.key]
+        this.size--;
+    }
+};
+
+/** 
+ * Your LRUCache object will be instantiated and called as such:
+ * var obj = new LRUCache(capacity)
+ * var param_1 = obj.get(key)
+ * obj.put(key,value)
+ */ 
