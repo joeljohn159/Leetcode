@@ -1,0 +1,36 @@
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number}
+ */
+var findMedianSortedArrays = function(nums1, nums2) {
+    let n = nums1.length;
+    let m = nums2.length;
+
+    if(n > m) return findMedianSortedArrays(nums2, nums1);
+
+    let low = 0;
+    let high = n;
+
+
+    while(low  <= high){
+        let partitionX = Math.floor((low + high) / 2);
+        let partitionY = Math.floor((m+n+1)/2) - partitionX; // +1 is to handle odd inconsistency, 
+
+        let leftX = partitionX === 0 ? -Infinity : nums1[partitionX-1];
+        let rightX = partitionX === n ? Infinity : nums1[partitionX];
+        let leftY = partitionY === 0 ? -Infinity : nums2[partitionY-1];
+        let rightY = partitionY === m ? Infinity : nums2[partitionY];
+
+        if(leftX <= rightY && leftY <= rightX){
+            if((n+m) %2 === 0) return (Math.max(leftX, leftY) + Math.min(rightX, rightY))/2;
+            else return Math.max(leftX,leftY)
+        }else if(leftX > rightY){
+            high = partitionX - 1;
+        }else{
+            low = partitionX + 1;
+        }
+
+    }
+
+}; 
