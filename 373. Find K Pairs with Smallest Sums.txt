@@ -1,0 +1,96 @@
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @param {number} k
+ * @return {number[][]}
+ */
+
+ class minHeap1{
+    constructor(){
+        this.data = []
+    }
+    isEmpty() {
+    return this.data.length === 0;
+}
+
+    push(ele){
+        this.data.push(ele);
+        this._bubbleUp(this.data.length-1)
+    }
+
+    pop(){
+        if(this.isEmpty()) return;
+        let max = this.data[0];
+        let end = this.data.pop();
+        if(!this.isEmpty()){
+            this.data[0] = end;
+            this._bubbleDown(0)
+        }
+        return max;
+    }
+
+    _bubbleUp(i){
+        const { data } = this;
+        while(i > 0){
+            let parent = Math.floor((i-1)/2);
+            if(data[parent][0] > data[i][0]){
+                [data[parent], data[i]] =  [data[i], data[parent]];
+                i = parent;
+            }else break;
+        }
+
+    }
+
+    _bubbleDown(i){
+        const { data } = this;
+        let l = 2*i + 1
+        let r = 2*i + 2;
+        let smallest = i;
+        if(l < data.length && data[l][0] < data[smallest][0]) smallest = l;
+        if(r < data.length && data[r][0] < data[smallest][0]) smallest = r;
+        if(smallest === i){
+            return;
+        }else{
+            [data[i], data[smallest]] = [data[smallest], data[i]];
+            this._bubbleDown(smallest)
+        }
+
+    }
+
+     peek(){
+        return this.data[0];
+    }
+}
+var kSmallestPairs = function(nums1, nums2, k) {
+    //if any one of the array is empty return []
+    if(!nums1.length || !nums2.length) return [];
+
+    //folow an X approach.
+
+    const minHeap = new minHeap1() //take a callback function
+    let visited = new Set();
+    minHeap.push([nums1[0]+nums2[0],0,0]);
+    visited.add(`0,0`) //i,j
+    let res = []
+
+
+    while(k > 0){
+        let [sum,i,j] = minHeap.pop();
+        // console.log
+        res.push([nums1[i], nums2[j]]);
+        k--;
+
+        if(i+1 < nums1.length && !visited.has(`${i+1},${j}`) ){
+            minHeap.push([nums1[i+1]+nums2[j],i+1,j]);
+            visited.add(`${i+1},${j}`) 
+        }
+
+        if(j+1 < nums2.length && !visited.has(`${i},${j+1}`) ){
+            minHeap.push([nums1[i]+nums2[j+1],i,j+1]);
+            visited.add(`${i},${j+1}`) 
+        }
+    }
+
+    return res
+
+}; 
