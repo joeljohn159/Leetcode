@@ -1,0 +1,22 @@
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var minOperations = function(s) {
+    //patterms are
+    //01010101.....
+    //10101010.....
+    let n = s.length;
+    let count1 = 0;
+    let count2 = 0;
+    let min;
+    for(let i=0; i<n; i++){
+        let expectedChar1 = i%2 == 0 ? '1' : '0';  
+        let expectedChar2 = i%2 == 0 ? '0' : '1';  
+        s[i] === expectedChar1 && count1++;
+        s[i] === expectedChar2 && count2++;
+    }
+    min = Math.min(count1, count2);
+    return min;
+
+}; 
