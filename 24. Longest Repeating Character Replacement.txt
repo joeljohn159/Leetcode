@@ -1,0 +1,27 @@
+/**
+ * @param {string} s
+ * @param {number} k
+ * @return {number}
+ */
+var characterReplacement = function(s, k) {
+    //if alphabets a better way is to use array and spead to find max
+
+
+    let n = s.length;
+    let l=0, r=0;
+    let arr = new Array(26).fill(0);
+    let max = 0;
+    while(r < n){
+        let curr = s[r];
+        arr[curr.charCodeAt(0) - 65] += 1
+        //condition to check if its a valid window;
+
+        while(r < n && ((r-l+1) - Math.max(...arr) > k)){
+            arr[s[l].charCodeAt(0) - 65] -=1
+            l++;
+        }
+        max = Math.max(max, r-l+1);
+        r++;
+    }
+    return max;
+}; 
