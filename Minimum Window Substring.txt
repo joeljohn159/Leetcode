@@ -1,0 +1,41 @@
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function (s, t) {
+    let hashMap = {};
+    let res = '';
+    let resLength = Infinity;
+
+    //store freq in hashMap
+    for (let i = 0; i < t.length; i++) {
+        hashMap[t[i]] = (hashMap[t[i]] || 0) + 1;
+    }
+
+    let have = 0;
+    let need = Object.keys(hashMap).length; // No freq is counted. this can be checked in next for loop
+
+    let l = 0;
+    let currWindow = {}
+
+    for (let r = 0; r < s.length; r++) {
+        let char = s[r]
+        currWindow[char] = (currWindow[char] || 0) + 1;
+
+        if (hashMap[char] == currWindow[char]) have++;
+
+        while (have === need) {
+            if (resLength > r - l + 1) {
+                res = s.slice(l, r + 1);
+                resLength = r - l + 1
+            }
+            currWindow[s[l]]--;
+            if ((s[l] in hashMap) && currWindow[s[l]] < hashMap[s[l]]) have--;
+            l++;
+        }
+    }
+    return res
+
+
+}; 
