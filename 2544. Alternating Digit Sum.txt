@@ -1,0 +1,28 @@
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var alternateDigitSum = function(n) {
+        let sum = 0;
+        let size = 0;
+        let sign = 1;
+        size =String(n).split("").length;
+        if(size % 2 == 0 ){
+             sign = 0;
+        }
+        
+
+        while(n){
+            let lsb = n%10;
+            n = Math.floor(n/10);
+            // if(lsb === 0) continue;
+            if(sign !== 1){
+                lsb = -lsb
+                sign = 1;
+            }else{  
+                sign = 0;
+            }
+            sum += lsb;
+        }
+        return sum;
+}; 
