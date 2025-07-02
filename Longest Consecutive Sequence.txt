@@ -1,0 +1,19 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var longestConsecutive = function(nums) {
+    let hashSet = new Set(nums);
+
+    let max = 0;
+    for(let num of hashSet){
+        if(!hashSet.has(num-1)){
+            let count = 0;
+            while(hashSet.has(num++)){
+                count++;
+            }
+            max = Math.max(max, count)
+        }
+    }
+    return max;
+}; 
