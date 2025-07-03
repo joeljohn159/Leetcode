@@ -1,0 +1,22 @@
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    let left = 0;
+    let right = 0;
+    let hashSet = new Set();
+    let max = 0;
+    while(right < s.length){
+        let char = s[right]
+        if(!(hashSet.has(char))){
+            hashSet.add(char)
+            max = Math.max(max, hashSet.size)
+            right++;
+        }else{
+            hashSet.delete(s[left])
+            left++;
+        }
+    }
+    return max;
+}; 
