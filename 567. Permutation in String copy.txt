@@ -1,0 +1,33 @@
+/**
+ * @param {string} s1
+ * @param {string} s2
+ * @return {boolean}
+ */
+var checkInclusion = function(s1, s2) {
+    //
+
+    if(s2.length < s1.length) return false
+    let code = new Array(26).fill(0);
+    let window = new Array(26).fill(0);
+    let a = 'a'.charCodeAt(0);
+
+    for(let i=0; i<s1.length; i++){
+        code[s1[i].charCodeAt(0) - a]++;
+        window[s2[i].charCodeAt(0) - a]++;
+    }
+
+    let left = 0;
+    let right = s1.length-1;
+    let str = code.join('')
+
+    while(right < s2.length){
+        if(str ===  window.join('')) return true;
+        window[s2[left].charCodeAt(0) - a]--;
+        left++;
+        right++;
+        if(right >= s2.length) break
+        window[s2[right].charCodeAt(0) - a]++;
+    } 
+
+    return false;
+}; 
