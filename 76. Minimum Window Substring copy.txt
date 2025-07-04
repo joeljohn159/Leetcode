@@ -1,0 +1,38 @@
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function(s, t) {
+    if(t.length > s.length) return "";
+    let min = "";
+    let minLength = Infinity;
+    let l = 0;
+
+    //hashMap for t
+    let hashMap = {}
+    for(let i=0; i<t.length; i++){
+        hashMap[t[i]] = (hashMap[t[i]] || 0) + 1
+    }
+
+    let have = 0;
+    let need = Object.keys(hashMap).length;
+
+    let windowMap = {}
+    for(let r=0; r<s.length; r++){
+        windowMap[s[r]] = (windowMap[s[r]] || 0) + 1;
+        if(hashMap[s[r]] === windowMap[s[r]] ) have++;
+        //if equal
+        while(have === need){
+            if((r-l+1) < minLength){
+                min = s.slice(l, r+1);
+                minLength = r-l+1;
+            }
+            windowMap[s[l]]--;
+            if(s[l] in hashMap && hashMap[s[l]] > windowMap[s[l]]) have--;
+            l++;
+        }
+
+    }
+    return min;
+}; 
