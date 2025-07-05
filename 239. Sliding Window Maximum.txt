@@ -1,0 +1,31 @@
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+var maxSlidingWindow = function(nums, k) {
+    let queue = [];
+    let res = [];
+
+    let l = 0, r = 0;
+    while(r < nums.length){
+        
+        //if queue values are smallers than curr,  remove it from queue
+        while(queue.length && nums[queue[queue.length-1]] < nums[r]){
+            queue.pop()
+        }
+        queue.push(r)
+
+
+        if(queue[0] < r-k+1){
+            queue.shift()
+        }
+        if(r+1 >= k){
+            res.push(nums[queue[0]]);
+            l++;
+        }
+        r++;
+    }
+
+    return res
+}; 
