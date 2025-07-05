@@ -1,0 +1,29 @@
+/**
+ * @param {number[]} temperatures
+ * @return {number[]}
+ */
+var dailyTemperatures = function(temperatures) {
+    //Utilize Monotonic STack to solve problems like this
+
+    //since i need the right most max i am traverse from right to left
+
+
+    let res = new Array(temperatures.length).fill(0);
+    let stack = []
+
+    for(let i=temperatures.length-1; i>=0; i--){
+        let temp = temperatures[i];
+
+        //WHILE LOOP TO CHECK 
+        while(stack.length && stack[stack.length-1][0] <= temp){
+            stack.pop();
+        }
+        //IF STACK IS EMPTY THEIR IS NO ELEMENT GREATER THAN CURRENT TO THE RIGHT
+        if(stack.length){
+            res[i] = stack[stack.length-1][1] - i
+        }
+            stack.push([temp, i]) //[temp, index]
+    }
+
+    return res
+}; 
