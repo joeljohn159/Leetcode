@@ -1,0 +1,24 @@
+/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var generateParenthesis = function(n) {
+  let res = [];
+  let stack = [];
+
+  function backtrack(stack, left, right){
+    //base case if the array is full
+    if(stack.length == n*2){
+        res.push(stack)
+        return
+    }
+    if(left < n){
+        backtrack(stack + '(', left+1, right)
+    }
+    if(right < left){
+         backtrack(stack + ')', left, right+1)
+    }
+  }  
+  backtrack('',0,0)
+  return res;
+}; 
