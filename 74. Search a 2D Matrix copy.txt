@@ -1,0 +1,32 @@
+/**
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
+var searchMatrix = function(matrix, target) {
+    //iterative
+
+    let leftRow = 0;
+    let rightRow = matrix.length-1;
+
+    while(leftRow <= rightRow){
+        let midRow = Math.floor((leftRow + rightRow)/2);
+        if(target >= matrix[midRow][0] && target <= matrix[midRow][matrix[midRow].length-1]){
+            //check in range
+            let left = 0;
+            let right = matrix[midRow].length-1;
+            while(left <= right){
+                let mid = Math.floor((left+right)/2);
+                if(matrix[midRow][mid] == target)return true
+                else if(target < matrix[midRow][mid]) right = mid - 1;
+                else left = mid + 1;
+            }
+            return false
+        }else if(target < matrix[midRow][0]){
+            rightRow = midRow - 1;
+        }else{
+            leftRow = midRow + 1;
+        }
+    }
+    return false;
+}; 
