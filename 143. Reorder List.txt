@@ -1,0 +1,47 @@
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {void} Do not return anything, modify head in-place instead.
+ */
+var reorderList = function(head) {
+    //travel to middle of the LL
+
+    let slow = head;
+    let fast = head;
+
+    while(fast && fast.next && fast.next.next){
+        fast = fast.next.next;
+        slow = slow.next;
+    }
+    
+    
+    //reverse the second half
+    let secHalf = slow.next;
+    slow.next = null
+    let prev = null;
+    while(secHalf){
+        let temp = secHalf.next;
+        secHalf.next = prev;
+        prev = secHalf;
+        secHalf = temp
+    }
+    let start1 = head;
+    let temp1;
+    let temp2;
+    while(start1 && prev){
+        let temp1 = start1.next;
+        let temp2 = prev.next;
+        start1.next = prev;
+        prev.next = temp1
+        start1 = temp1
+        prev = temp2;
+    }
+   
+   return head;
+}; 
