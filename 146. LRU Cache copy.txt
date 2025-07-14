@@ -1,0 +1,109 @@
+class Node {
+    constructor(key, val, prev, next) {
+        this.key = key;
+        this.val = val;
+        this.prev = prev || null;
+        this.next = next || null;
+    }
+}
+
+class DLL {
+    constructor(size) {
+        this.MRU = null;
+        this.LRU = null;
+        this.maxSize = size;
+        this.currSize = 0;
+
+    }
+
+    add(key, val) {
+        let node = new Node(key, val);
+        let removed = null
+        if(this.MRU === null){
+            this.MRU = node;
+            this.LRU = node;
+            this.currSize++;
+        }else if (this.currSize < this.maxSize) {
+            this.MRU.next = node;
+            node.prev = this.MRU
+            this.MRU = node;
+            this.currSize++;
+        }else{
+            this.MRU.next = node;
+            node.prev = this.MRU
+            this.MRU = node;
+
+            removed = this.LRU
+            this.LRU = this.LRU.next;
+            if(this.LRU.prev){
+                this.LRU.prev = null
+            }
+        }
+        return [node, removed];
+    }
+
+    remove(node){
+        //case 1 only ele
+        if(!node) return
+        if(node.prev === null && node.next === null){
+            this.MRU = null
+            this.LRU =null
+        }else if(node.prev === null){  //case 2 its LRU
+            this.LRU = this.LRU.next
+            if(this.LRU)this.LRU.prev = null;
+        }else if(node.next == null){ //MRU is to be removed
+            this.MRU = this.MRU.prev
+            if(this.MRU)this.MRU.next = null
+        }else{ //in between
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+        }
+        this.currSize--;
+    }
+}
+/**
+ * @param {number} capacity
+ */
+var LRUCache = function (capacity) {
+    this.hashMap = new Map();
+    this.DLL = new DLL(capacity)
+};
+
+/** 
+ * @param {number} key
+ * @return {number}
+ */
+LRUCache.prototype.get = function (key) {
+    if(!this.hashMap.has(key)) return -1;
+    let node = this.hashMap.get(key)[1]
+    let val = this.hashMap.get(key)[0]
+    this.DLL.remove(node)
+    let [newNode,removed] = this.DLL.add(key, val);
+    this.hashMap.set(key, [val, newNode]);
+    return val;
+};
+
+/** 
+ * @param {number} key 
+ * @param {number} value
+ * @return {void}
+ */
+LRUCache.prototype.put = function (key, value) {
+    if (this.hashMap.has(key)) {
+        let [, oldNode] = this.hashMap.get(key);
+        this.DLL.remove(oldNode);
+        this.hashMap.delete(key);
+    }
+    let [node, removed] = this.DLL.add(key,value)
+    this.hashMap.set(key, [value, node])
+    if(removed){
+        this.hashMap.delete(removed.key);
+    }
+};
+
+/** 
+ * Your LRUCache object will be instantiated and called as such:
+ * var obj = new LRUCache(capacity)
+ * var param_1 = obj.get(key)
+ * obj.put(key,value)
+ */ 
