@@ -1,0 +1,111 @@
+class MinPriorityQueues {
+    constructor() {
+        this.heap = []
+        this.size = 0
+    }
+
+    //parent
+    parent(i) {
+        return Math.floor((i - 1) / 2)
+    }
+
+    //leftChild
+    LC(i) {
+        return i * 2 + 1
+    }
+
+    //rightChild
+    RC(i) {
+        return i * 2 + 2
+    }
+
+    //Perllocate Up
+    PU(index) {
+        let parent = this.parent(index);
+        if (parent >= 0 && this.heap[parent] > this.heap[index]) {
+            this.swap(parent, index);
+            this.PU(parent)
+        }
+    }
+
+    //swap
+    swap(i1, i2) {
+        [this.heap[i1], this.heap[i2]] = [this.heap[i2], this.heap[i1]]
+    }
+
+    //Perlocate Down
+    PD(index) {
+        let leftChild = this.LC(index);
+        let rightChild = this.RC(index);
+        let currMin = index
+        if (leftChild < this.size && this.heap[leftChild] < this.heap[index]) currMin = leftChild
+        if (rightChild < this.size && this.heap[rightChild] < this.heap[currMin]) currMin = rightChild
+        if (currMin !== index) {
+            this.swap(index, currMin);
+            this.PD(currMin)
+        }
+
+
+    }
+    //Top
+    top() {
+        if (!this.size) return null
+        return this.heap[0]
+    }
+
+    //enqueue
+    enqueue(val) {
+        this.heap.push(val);
+        this.size++;
+        this.PU(this.size - 1)
+    }
+
+    //dequeue
+
+    dequeue() {
+        if (!this.size) return
+        [this.heap[0], this.heap[this.size - 1]] = [this.heap[this.size - 1], this.heap[0]]
+        let ele = this.heap.pop();
+        this.size--;
+        this.PD(0)
+    }
+
+
+}
+
+/**
+ * @param {number} k
+ * @param {number[]} nums
+ */
+var KthLargest = function (k, nums) {
+    this.minHeap = new MinPriorityQueues();
+    this.k = k
+    for (let i = 0; i < nums.length; i++) {
+        this.minHeap.enqueue(nums[i])
+    }
+    //remove size-k
+    let temp = nums.length - k
+    while (temp > 0) {
+        this.minHeap.dequeue();
+        temp--;
+    }
+
+};
+
+/** 
+ * @param {number} val
+ * @return {number}
+ */
+KthLargest.prototype.add = function (val) {
+    this.minHeap.enqueue(val)
+    if (this.minHeap.size > this.k ) {
+        this.minHeap.dequeue(val)
+    }
+    return this.minHeap.size == this.k ? this.minHeap.top() : null
+};
+
+/** 
+ * Your KthLargest object will be instantiated and called as such:
+ * var obj = new KthLargest(k, nums)
+ * var param_1 = obj.add(val)
+ */ 
