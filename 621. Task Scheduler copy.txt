@@ -1,0 +1,106 @@
+class MaxPriorityQueueJOEL {
+    constructor() {
+        this.heap = []
+    }
+
+    parent(i) {
+        return Math.floor((i - 1) / 2)
+    }
+
+    leftChild(i) {
+        return i * 2 + 1
+    }
+
+    rightChild(i) {
+        return i * 2 + 2
+    }
+    swap(i1, i2) {
+        [this.heap[i1], this.heap[i2]] = [this.heap[i2], this.heap[i1]];
+    }
+    heapifyUp(i) {
+        let parent = this.parent(i);
+        if (parent < 0) return;
+        if (this.heap[parent][1] < this.heap[i][1]) {
+            this.swap(parent, i);
+            this.heapifyUp(parent)
+        }
+
+    }
+    heapifyDown(i) {
+        let leftChild = this.leftChild(i);
+        let rightChild = this.rightChild(i);
+        let max = i
+
+        if (leftChild < this.heap.length && this.heap[leftChild][1] > this.heap[max][1]) {
+            max = leftChild
+        }
+
+        if (rightChild < this.heap.length && this.heap[rightChild][1] > this.heap[max][1]) {
+            max = rightChild
+        }
+
+        if (i != max) {
+            this.swap(i, max)
+            this.heapifyDown(max)
+        }
+    }
+
+    enqueue(val) {
+        this.heap.push(val);
+        this.heapifyUp(this.heap.length - 1)
+    }
+
+    dequeue() {
+        if (this.heap.length < 1) return null;
+        let top = this.heap[0]
+        let end = this.heap.pop()
+
+        if (this.heap.length >= 1) {
+            this.heap[0] = end;
+            this.heapifyDown(0)
+        }
+        return top;
+    }
+
+    peek() {
+        if (!this.heap.length) return null;
+        return this.heap[0]
+    }
+
+    size() {
+        return this.heap.length
+    }
+}
+/**
+ * @param {character[]} tasks
+ * @param {number} n
+ * @return {number}
+ */
+var leastInterval = function (tasks, n) {
+    let queue = []
+    let maxHeap = new MaxPriorityQueueJOEL();
+    let hashMap = new Map();
+    for (let i = 0; i < tasks.length; i++) {
+        let char = tasks[i]
+        hashMap.set(char, (hashMap.get(char) || 0) + 1)
+    }
+    for (let set of hashMap) {
+        maxHeap.enqueue(set)
+    }
+    // let min = 0;
+    let time = 0;
+    while (maxHeap.size() || queue.length) {
+        time++;
+        if (maxHeap.size()) {
+            let [char, freq] = maxHeap.dequeue();
+            if (freq - 1 > 0) {
+                queue.push([char, freq-1, time + n])
+            }
+        }
+        if(queue.length && queue[0][2] === time){
+            let [char, freq, time] = queue.shift()
+            maxHeap.enqueue([char, freq])
+        }
+    }
+    return time
+}; 
