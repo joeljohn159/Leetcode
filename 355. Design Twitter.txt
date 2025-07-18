@@ -1,0 +1,143 @@
+class MaxPriorityQueueJOEL {
+    constructor() {
+        this.heap = []
+    }
+
+    parent(i) {
+        return Math.floor((i - 1) / 2)
+    }
+
+    leftChild(i) {
+        return i * 2 + 1
+    }
+
+    rightChild(i) {
+        return i * 2 + 2
+    }
+    swap(i1, i2) {
+        [this.heap[i1], this.heap[i2]] = [this.heap[i2], this.heap[i1]];
+    }
+    heapifyUp(i) {
+        let parent = this.parent(i);
+        if (parent < 0) return;
+        if (this.heap[parent][2] < this.heap[i][2]) {
+            this.swap(parent, i);
+            this.heapifyUp(parent)
+        }
+
+    }
+    heapifyDown(i) {
+        let leftChild = this.leftChild(i);
+        let rightChild = this.rightChild(i);
+        let max = i
+
+        if (leftChild < this.heap.length && this.heap[leftChild][2] > this.heap[max][2]) {
+            max = leftChild
+        }
+
+        if (rightChild < this.heap.length && this.heap[rightChild][2] > this.heap[max][2]) {
+            max = rightChild
+        }
+
+        if (i != max) {
+            this.swap(i, max)
+            this.heapifyDown(max)
+        }
+    }
+
+    enqueue(val) {
+        this.heap.push(val);
+        this.heapifyUp(this.heap.length - 1)
+    }
+
+    dequeue() {
+        if (this.heap.length < 1) return null;
+        let top = this.heap[0]
+        let end = this.heap.pop()
+
+        if (this.heap.length >= 1) {
+            this.heap[0] = end;
+            this.heapifyDown(0)
+        }
+        return top;
+    }
+
+    peek() {
+        if (!this.heap.length) return null;
+        return this.heap[0]
+    }
+
+    size() {
+        return this.heap.length
+    }
+}
+var Twitter = function () {
+    this.hashMap = new Map();
+    this.tweets = []
+    this.time = 0;
+};
+
+/** 
+ * @param {number} userId 
+ * @param {number} tweetId
+ * @return {void}
+ */
+Twitter.prototype.postTweet = function (userId, tweetId) {
+    this.time++;
+    this.tweets.push([userId, tweetId, this.time])
+};
+
+/** 
+ * @param {number} userId
+ * @return {number[]}
+ */
+Twitter.prototype.getNewsFeed = function (userId) {
+    let maxHeap = new MaxPriorityQueueJOEL();
+    let followees = this.hashMap.get(userId) || new Set()
+    followees.add(userId)
+    for(let i= this.tweets.length-1; i>= 0 && maxHeap.size() < 100 ; i--){
+        let [userID, tweetID, time] = this.tweets[i];
+        if(followees.has(userID)){
+            maxHeap.enqueue([userID, tweetID, time])
+        }
+    }
+
+    const res = []
+    while(maxHeap.size() && res.length < 10){
+        res.push(maxHeap.dequeue()[1])
+    }
+
+    return res
+};
+
+/** 
+ * @param {number} followerId 
+ * @param {number} followeeId
+ * @return {void}
+ */
+Twitter.prototype.follow = function (followerId, followeeId) {
+    if (!this.hashMap.has(followerId)) {
+        this.hashMap.set(followerId, new Set())
+    }
+    this.hashMap.get(followerId).add(followeeId)
+};
+
+/** 
+ * @param {number} followerId 
+ * @param {number} followeeId
+ * @return {void}
+ */
+Twitter.prototype.unfollow = function (followerId, followeeId) {
+    if (this.hashMap.has(followerId)) {
+        this.hashMap.get(followerId).delete(followeeId)
+    }
+};
+
+/** 
+ * Your Twitter object will be instantiated and called as such:
+ * var obj = new Twitter()
+ * obj.postTweet(userId,tweetId)
+ * var param_2 = obj.getNewsFeed(userId)
+ * obj.follow(followerId,followeeId)
+ * obj.unfollow(followerId,followeeId)
+ */ 
